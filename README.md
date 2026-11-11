@@ -42,20 +42,25 @@ Its main goal is to automate customer support through specialized agents while e
 
 ## 🏛️ Multi-Agent System Architecture
 
-ShopSmart AI uses three specialized agents coordinated by a central orchestrator.
+ShopSmart AI uses three specialized agents coordinated by a central orchestrator. Each agent performs a separate task and passes its structured result to the next agent.
 
 ```mermaid
 flowchart TD
-    A[Customer Question] --> B[FAQ Assistant Orchestrator]
+    User([Customer Question]) --> Orchestrator[FAQ Assistant Orchestrator]
 
-    subgraph Agents[Collaborative Multi-Agent Pipeline]
-        B --> C[Agent 1: FAQ Classifier]
-        C --> D[Agent 2: Knowledge Agent]
-        D <--> E[(FAQ Knowledge Base)]
-        D --> F[Agent 3: Response Agent]
+    subgraph MultiAgentPipeline["Collaborative Multi-Agent Pipeline"]
+
+        Orchestrator --> Agent1["Agent 1: FAQ Classifier<br/>Role: Question Classification Specialist<br/>• Analyzes query intent and n-grams<br/>• Identifies customer category<br/>• Detects keywords and confidence"]
+
+        Agent1 -->|ClassificationResult| Agent2["Agent 2: Knowledge Agent<br/>Role: FAQ Knowledge Specialist<br/>• Searches predefined knowledge base<br/>• Matches primary and alternative questions<br/>• Applies relevance threshold"]
+
+        Agent2 -->|KnowledgeResult| Agent3["Agent 3: Response Agent<br/>Role: Customer Support Specialist<br/>• Creates professional responses<br/>• Uses verified FAQ information<br/>• Applies anti-hallucination guardrail"]
+
     end
 
-    F --> G[Grounded Customer Response]
+    Agent2 <--> KnowledgeBase[(FAQ Knowledge Base)]
+
+    Agent3 --> FinalOutput([Structured Grounded Response<br/>+ Agent Execution Trace])
 ```
 
 ### Agent Call Flow
@@ -66,23 +71,24 @@ sequenceDiagram
     participant O as Orchestrator
     participant C as Classifier Agent
     participant K as Knowledge Agent
-    participant R as Response Agent
     participant DB as FAQ Knowledge Base
+    participant R as Response Agent
 
     U->>O: Submit Question
-    O->>C: Classify Query
-    C-->>O: Category & Confidence
-    O->>K: Retrieve Relevant FAQ
-    K->>DB: Search Knowledge Base
-    DB-->>K: Matching FAQ
-    K-->>O: Knowledge Result
-    O->>R: Generate Grounded Response
-    R-->>U: Final Answer
+    O->>C: Classify Customer Query
+    C-->>O: Category, Keywords & Confidence
+    O->>K: Retrieve Relevant Information
+    K->>DB: Search FAQ Records
+    DB-->>K: Matching FAQ Results
+    K-->>O: Knowledge Result & Relevance Score
+    O->>R: Process Retrieved Information
+    R-->>U: Final Grounded Response
 ```
 
 ## 👥 Agent Roles & Responsibilities
 
 ### 1. FAQ Classifier Agent
+
 - Identifies customer intent and query category.
 - Extracts keywords and calculates confidence.
 - Supports six business categories and out-of-scope queries.
@@ -90,6 +96,7 @@ sequenceDiagram
 **Source:** `agents/classifier_agent.py`
 
 ### 2. Knowledge Agent
+
 - Searches the 29-entry FAQ knowledge base.
 - Uses exact matching, keyword matching, and similarity scoring.
 - Applies a minimum relevance threshold of `0.25`.
@@ -97,6 +104,7 @@ sequenceDiagram
 **Source:** `agents/knowledge_agent.py`
 
 ### 3. Response Agent
+
 - Generates clear and professional customer responses.
 - Uses verified FAQ information only.
 - Refuses unsupported queries instead of inventing answers.
