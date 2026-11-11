@@ -1,6 +1,9 @@
 
 <p align="center">
-  <img src="assets/shopsmart-banner.gif" alt="ShopSmart AI — Animated Project Banner" width="100%" />
+  <img
+    src="https://readme-typing-svg.demolab.com?font=Arial&weight=800&size=42&duration=2500&pause=1000&color=000000&center=true&vCenter=true&width=750&height=90&lines=ShopSmart+AI;Autonomous+Multi-Agent+FAQ+Assistant"
+    alt="ShopSmart AI Animated Title"
+  />
 </p>
 
 <p align="center">
@@ -88,7 +91,7 @@ Responsibilities:
 
 - Indexes and maintains the 29-entry predefined knowledge base in `knowledge_base/faq_data.json`.
 - Uses multi-aspect relevance scoring:
-  - Exact query matching against canonical and alternative questions.
+  - Exact query string matching against canonical and alternative questions.
   - Token Jaccard similarity with suffix normalization.
   - Multi-word keyword phrase boosting.
   - Category-scoped search with cross-domain fallback.
@@ -103,11 +106,11 @@ Responsibilities:
 Responsibilities:
 
 - Synthesizes clear, empathetic, and professional customer service answers.
-- Constrains factual claims to the content of the retrieved FAQ.
+- Strictly constrains factual claims to the retrieved FAQ information.
 - Injects verified policy notices, conditions, and SLA timeframes.
 - Suggests related FAQ articles when applicable.
 - Enforces Requirement 5: if knowledge is unavailable or out-of-scope, refuses to invent details, explains that verified FAQ information is absent, and provides human representative contact details.
-- Emits a structured `ResponseResult` with `is_grounded`, `grounding_source_id`, and an audit trail.
+- Emits a structured `ResponseResult` with `is_grounded`, `grounding_source_id`, and a full audit trail.
 
 ---
 
@@ -117,12 +120,12 @@ The predefined knowledge repository (`knowledge_base/faq_data.json`) contains 29
 
 | Category | FAQ ID Range | Topics Covered |
 |---|---|---|
-| **Orders** | `ORD-001` – `ORD-006` | Order placement, 30-minute cancellation/modification window, live shipment tracking, address changes, VAT invoice downloads, order confirmation |
-| **Payments** | `PAY-001` – `PAY-005` | Accepted payment methods, payment security, declined card troubleshooting, Cash on Delivery limits, installment payments |
-| **Deliveries** | `DEL-001` – `DEL-006` | Standard delivery, express/same-day shipping, free shipping threshold, international shipping, missed delivery attempts, delivery delay resolution |
-| **Returns** | `RET-001` – `RET-005` | Return policy, non-returnable items, return label generation, return shipping fees, packaging and condition guidelines |
+| **Orders** | `ORD-001` – `ORD-006` | Order placement, 30-minute cancellation/modification window, live shipment tracking, address changes, VAT invoice downloads, order confirmation delivery |
+| **Payments** | `PAY-001` – `PAY-005` | Accepted payment methods (Visa, MasterCard, PayPal, Apple Pay), payment security, declined card troubleshooting, Cash on Delivery limits, installment payments |
+| **Deliveries** | `DEL-001` – `DEL-006` | Standard delivery timeline, express/same-day shipping, free shipping threshold, international shipping, missed delivery attempts, delivery delay resolution |
+| **Returns** | `RET-001` – `RET-005` | Return policy, non-returnable hygiene items, return label generation, return shipping fees, packaging and condition guidelines |
 | **Refunds** | `REF-001` – `REF-005` | Refund processing times, original payment method, store credit option, voucher deductions, missing refund investigations |
-| **General** | `GEN-001` – `GEN-003` | Customer care operating hours, phone/email support, account creation, password reset |
+| **General** | `GEN-001` – `GEN-003` | Customer care operating hours, phone/email support, account creation, password reset procedures |
 
 ---
 
@@ -136,11 +139,11 @@ flowchart LR
     Check -->|Yes| Matched[Status: Found<br/>Pass Record to Response Agent]
     Check -->|No| Miss[Status: Not Found<br/>Flag Information Unavailable]
 
-    Matched --> Grounded[Generate Response<br/>is_grounded: true<br/>Facts from FAQ Knowledge Base]
-    Miss --> Refusal[Safe Refusal<br/>is_grounded: false<br/>Do not guess<br/>Offer Human Support]
+    Matched --> Grounded[Generate Response<br/>is_grounded: true<br/>Factual Data from KB Only]
+    Miss --> Refusal[Generate Safe Refusal<br/>is_grounded: false<br/>State Information Unavailable<br/>Offer Human Support]
 ```
 
-**Refusal Guarantee:** When the knowledge base does not contain sufficiently relevant information, the assistant does not fabricate delivery windows, return policies, or refund terms. It transparently states that verified information is unavailable and recommends human support.
+**Refusal Guarantee:** Under no circumstance will the assistant invent delivery windows to unsupported locations, fabricate return policies for non-existent items, or guess refund terms. If no relevant verified FAQ exists, the system refuses to guess and recommends human support.
 
 ---
 
@@ -148,9 +151,9 @@ flowchart LR
 
 - **Runtime:** Python 3.10+ (Standard Library: `http.server`, `urllib`, `json`, `dataclasses`, `unittest`, `re`).
 - **Dependencies:** Zero external Python package dependencies required.
-- **Frontend:** Responsive dashboard built with semantic HTML5, modern CSS3, and vanilla JavaScript.
+- **Frontend:** Responsive enterprise dashboard built with semantic HTML5, modern CSS3, and vanilla JavaScript.
 - **Testing:** Python `unittest` suite with 45 unit, integration, and DOM tests.
-- **LLM Augmentation:** `agents/llm_client.py` performs an optional provider connectivity check only; it does not generate customer answers.
+- **LLM Augmentation:** `agents/llm_client.py` performs optional provider connectivity checks only; it does not generate customer answers.
 
 ---
 
@@ -162,24 +165,22 @@ ShopSmart-AI/
 │   └── faq_data.json          # Predefined 29-entry FAQ Knowledge Base
 ├── agents/
 │   ├── __init__.py            # Module exports
-│   ├── base_agent.py          # Abstract BaseAgent and AgentTrace
+│   ├── base_agent.py          # Abstract BaseAgent & AgentTrace dataclasses
 │   ├── classifier_agent.py    # Agent 1: FAQ Classifier
 │   ├── knowledge_agent.py     # Agent 2: Knowledge Agent
 │   ├── response_agent.py      # Agent 3: Response Agent
 │   └── llm_client.py          # Optional provider connectivity probe
 ├── assistant.py               # Main multi-agent orchestrator
 ├── main.py                    # Multi-mode CLI tool
-├── server.py                  # HTTP API server and web dashboard host
+├── server.py                  # HTTP API server & web dashboard host
 ├── web/
-│   └── index.html             # Enterprise web dashboard
+│   └── index.html             # Enterprise visual multi-agent dashboard
 ├── tests/
 │   ├── __init__.py
-│   ├── test_faq_assistant.py  # 42 unit and integration tests
-│   └── test_frontend_dom.py   # 3 DOM and JavaScript syntax tests
-├── assets/
-│   └── shopsmart-banner.gif   # Animated project banner
-├── .env.example               # Environment configuration template
-├── .gitignore                 # Git ignore rules
+│   ├── test_faq_assistant.py  # 42 unit & integration tests
+│   └── test_frontend_dom.py   # 3 DOM & JavaScript syntax tests
+├── .env.example               # Environment variables configuration template
+├── .gitignore                 # Standard clean ignore file
 └── README.md                  # Project documentation
 ```
 
@@ -207,13 +208,21 @@ py --version
 
 ### 4. Optional Environment Configuration
 
-The current implementation runs locally without API keys. It uses deterministic classification, FAQ retrieval, and grounded response templates; no external LLM inference is performed.
+Copy `.env.example` to `.env` only if you want to configure an optional provider connectivity check.
+
+```bash
+cp .env.example .env
+```
+
+**Note:** The current implementation runs locally without API keys. It uses deterministic classification, FAQ retrieval, and grounded response templates; no external LLM inference is performed.
 
 ---
 
 ## 🚀 Execution & Run Guide
 
 ### 1. Run Predefined Demo Suite
+
+Executes the six primary assignment scenarios plus additional edge cases:
 
 ```bash
 py main.py
@@ -286,7 +295,7 @@ py -m unittest discover -s tests -v
 ### Test Coverage Summary
 
 - **`TestAssignmentSixScenarios` (6 tests):** Validates Scenarios 1 through 6.
-- **`TestFAQClassifierAgent` (14 tests):** Validates classification across supported categories and edge cases.
+- **`TestFAQClassifierAgent` (14 tests):** Validates classification across orders, payments, deliveries, delays, returns, refunds, general queries, empty strings, and out-of-scope inputs.
 - **`TestKnowledgeAgent` (6 tests):** Validates knowledge base indexing, exact matching, retrieval, empty queries, and threshold gating.
 - **`TestResponseAgent` (2 tests):** Validates grounded answer synthesis and anti-hallucination refusal formatting.
 - **`TestEndToEndPipeline` (4 tests):** Validates trace propagation, latency, serialization, and LLM status structure.
@@ -299,22 +308,22 @@ py -m unittest discover -s tests -v
 
 ## 🎯 Six Core Assignment Scenarios
 
-The six scenarios from the assignment are covered by the automated tests:
+The six scenarios from the assignment are verified by the automated tests:
 
 ### Scenario 1: Order Tracking
 
 - **Input:** "How can I track my order?"
-- **Agent 1:** Classifies the inquiry into `orders`.
+- **Agent 1:** Classifies the inquiry into `orders` (confidence: `0.98`).
 - **Agent 2:** Retrieves FAQ `ORD-003`.
-- **Agent 3:** Returns a grounded response with shipment tracking guidance.
+- **Agent 3:** Formulates a grounded response with shipment confirmation details, carrier tracking instructions, and update conditions.
 - **Status:** **PASS**
 
 ### Scenario 2: Payment Methods
 
 - **Input:** "Which payment methods do you accept?"
-- **Agent 1:** Classifies the inquiry into `payments`.
+- **Agent 1:** Classifies the inquiry into `payments` (confidence: `0.98`).
 - **Agent 2:** Retrieves FAQ `PAY-001`.
-- **Agent 3:** Returns a grounded response listing the payment methods recorded in the FAQ.
+- **Agent 3:** Lists payment methods recorded in the FAQ.
 - **Status:** **PASS**
 
 ### Scenario 3: Delivery Delay
@@ -322,7 +331,7 @@ The six scenarios from the assignment are covered by the automated tests:
 - **Input:** "My delivery is delayed. What should I do?"
 - **Agent 1:** Classifies the inquiry into `deliveries`.
 - **Agent 2:** Retrieves FAQ `DEL-006`.
-- **Agent 3:** Explains tracking checks and the documented support escalation process.
+- **Agent 3:** Explains tracking status checks and documented support escalation guidance.
 - **Status:** **PASS**
 
 ### Scenario 4: Return Procedures
@@ -344,8 +353,8 @@ The six scenarios from the assignment are covered by the automated tests:
 ### Scenario 6: Missing Policy — Anti-Hallucination Guardrail
 
 - **Input:** "Can you deliver my order via spaceship to Mars?"
-- **Agent 1:** Classifies the inquiry for retrieval.
-- **Agent 2:** Finds no sufficiently relevant FAQ; the relevance score is below the `0.25` threshold.
+- **Agent 1:** Classifies the inquiry into `deliveries`.
+- **Agent 2:** Finds no sufficiently relevant FAQ. The relevance score is below the `0.25` threshold.
 - **Agent 3:** Refuses to guess, explains that the policy is unavailable, and directs the customer to the configured support channel.
 - **Status:** **PASS**
 
@@ -353,15 +362,15 @@ The six scenarios from the assignment are covered by the automated tests:
 
 ## Important Implementation Note
 
-This submission uses a deterministic three-agent pipeline: rule-based intent classification, FAQ retrieval, and template-based grounded response generation. The optional `llm_client.py` performs a provider connectivity check only; it is **not** connected to answer generation. Do not describe the current build as using live generative LLM inference unless that integration is implemented and tested separately.
+This submission currently uses a deterministic three-agent pipeline: rule-based intent classification, FAQ retrieval, and template-based grounded response generation. The optional `llm_client.py` performs a provider connectivity check only; it is **not** connected to answer generation. Do not describe the current build as using a live generative LLM unless that integration is implemented and tested separately.
 
-The web server serves `web/index.html` at `/`. If the browser shows a JSON 404 response, stop any older server process using the selected port, then start this project's server from the project root:
+The web server serves `web/index.html` at `/`. If Chrome shows a JSON 404 page, stop any older server process using port 8010 (`Ctrl+C` in its terminal), then start this project's server from the project root:
 
 ```bash
 py server.py 8010
 ```
 
-Confirm the terminal reports the ShopSmart URL before opening `http://localhost:8010/`.
+Confirm the terminal prints the ShopSmart URL before opening `http://localhost:8010/`.
 
 ---
 
