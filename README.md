@@ -1,190 +1,189 @@
-# 🛍️ ShopSmart AI
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=36&duration=3000&pause=1000&color=E63946&center=true&vCenter=true&width=650&lines=ShopSmart+AI;Autonomous+Multi-Agent+FAQ+Assistant" alt="ShopSmart AI Animated Title" />
+  <img src="assets/shopsmart-banner.gif" alt="ShopSmart AI — Animated Project Banner" width="100%" />
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Tests-45%20Automated-brightgreen" alt="Tests" />
-  <img src="https://img.shields.io/badge/Architecture-Collaborative%20Multi--Agent-blue" alt="Architecture" />
-  <img src="https://img.shields.io/badge/Python-3.10%2B-blue" alt="Python" />
-  <img src="https://img.shields.io/badge/Dependencies-Zero-success" alt="Dependencies" />
-  <img src="https://img.shields.io/badge/Guardrail-Anti--Hallucination-purple" alt="Guardrail" />
+
+[![Tests](https://img.shields.io/badge/Tests-45%20Automated-brightgreen)](#-automated-test-suite-45-tests)
+[![Architecture](https://img.shields.io/badge/Architecture-Collaborative%20Multi--Agent-blue)](#-multi-agent-system-architecture)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](#-installation--setup)
+[![Dependencies](https://img.shields.io/badge/External%20Dependencies-Zero%20(Standard%20Library)-success)](#-technology-stack)
+[![Anti--Hallucination](https://img.shields.io/badge/Guardrail-Strict%20Anti--Hallucination-purple)](#-anti-hallucination-engine-requirement-5)
+
 </p>
 
-<p align="center">
-  An enterprise-style multi-agent customer support assistant for online shopping platforms.
-</p>
+An enterprise-grade, multi-agent AI customer support assistant built for an online retail shopping platform. The system autonomously processes high-volume customer inquiries regarding **orders**, **payments**, **deliveries**, **returns**, **refunds**, and **general queries**, enforcing strict factual grounding against a predefined knowledge base to prevent hallucinations.
 
 ---
 
-## 📌 Project Overview
+## 📋 Table of Contents
 
-ShopSmart AI is a multi-agent FAQ assistant designed to automate customer support inquiries for an online retail platform.
+1. [Project Overview & Problem Statement](#-project-overview--problem-statement)
+2. [Multi-Agent System Architecture](#-multi-agent-system-architecture)
+3. [Agent Roles & Responsibilities](#-agent-roles--responsibilities)
+4. [Knowledge Base Coverage](#-knowledge-base-coverage)
+5. [Anti-Hallucination Engine](#-anti-hallucination-engine-requirement-5)
+6. [Technology Stack](#-technology-stack)
+7. [Project Directory Layout](#-project-directory-layout)
+8. [Installation & Setup](#-installation--setup)
+9. [Execution & Run Guide](#-execution--run-guide)
+10. [REST API Documentation](#-rest-api-documentation)
+11. [Automated Test Suite](#-automated-test-suite-45-tests)
+12. [Six Core Assignment Scenarios](#-six-core-assignment-scenarios)
 
-It processes customer questions related to:
+---
 
-- Orders and order tracking
-- Payment methods
-- Deliveries and shipping delays
-- Returns and return policies
-- Refunds and refund timelines
-- General customer support
+## 📌 Project Overview & Problem Statement
 
-The system uses three specialized agents to classify questions, retrieve relevant FAQ information, and generate accurate responses grounded in a predefined knowledge base.
+An online retail store receives hundreds of questions daily concerning shipments, refunds, returns, order updates, and payment methods. The objective is to replace manual repetitive triage with an autonomous, high-precision **Multi-Agent FAQ Assistant** satisfying five core mandates:
 
-A strict anti-hallucination mechanism prevents the assistant from inventing answers when verified information is unavailable.
+1. **Accept a customer question** across diverse phrasings and lengths.
+2. **Identify the category** of the inquiry with intent recognition and confidence scoring.
+3. **Search a predefined FAQ knowledge base** using multi-aspect semantic and lexical matching.
+4. **Generate an appropriate response** grounded exclusively in verified policy information.
+5. **Avoid inventing answers** when verified information is unavailable (strictly eliminate hallucinations).
+
+---
 
 ## 🏛️ Multi-Agent System Architecture
 
-The application follows a collaborative three-agent workflow.
+The application implements an orchestrated pipeline of three specialized autonomous agents:
 
 ```mermaid
 flowchart TD
-    A[Customer Question] --> B[FAQ Assistant Orchestrator]
+    User([Customer Question]) --> Orchestrator[FAQ Assistant Orchestrator]
 
-    B --> C[Agent 1: FAQ Classifier]
-    C --> D[Agent 2: Knowledge Agent]
-    D --> E[Agent 3: Response Agent]
+    subgraph MultiAgentPipeline["Collaborative Multi-Agent Pipeline"]
+        Orchestrator --> Agent1["Agent 1: FAQ Classifier<br/>Question Classification Specialist"]
+        Agent1 -->|ClassificationResult| Agent2["Agent 2: Knowledge Agent<br/>FAQ Knowledge Specialist"]
+        Agent2 -->|KnowledgeResult| Agent3["Agent 3: Response Agent<br/>Customer Support Specialist"]
+    end
 
-    D --> F{Knowledge Found?}
-
-    F -->|Yes| G[Generate Grounded Response]
-    F -->|No| H[Safe Refusal and Human Escalation]
-
-    G --> I[Final Customer Response]
-    H --> I
+    Agent3 --> FinalOutput([Structured Grounded Response + Latency Trace])
 ```
+
+---
 
 ## 👥 Agent Roles & Responsibilities
 
-### 1. FAQ Classifier Agent
+### 1. FAQ Classifier (`FAQClassifierAgent`)
 
-**File:** `agents/classifier_agent.py`
-
-Responsibilities:
-
-- Analyzes customer questions.
-- Normalizes and tokenizes user input.
-- Identifies the most relevant inquiry category.
-- Calculates classification confidence.
-- Extracts relevant keywords.
-- Produces a structured classification result.
-
-Supported categories:
-
-`orders`, `payments`, `deliveries`, `returns`, `refunds`, `general`, and `out_of_scope`.
-
-### 2. Knowledge Agent
-
-**File:** `agents/knowledge_agent.py`
+- **Role:** Question Classification Specialist
+- **Source:** `agents/classifier_agent.py`
 
 Responsibilities:
 
-- Searches the predefined FAQ knowledge base.
-- Matches customer questions with relevant FAQ records.
-- Uses exact matching, keyword matching, and similarity scoring.
-- Applies category-based retrieval.
-- Enforces a minimum relevance threshold of `0.25`.
-- Returns `not_found` when no sufficiently relevant FAQ is available.
+- Tokenizes, normalizes, and extracts n-grams from customer inquiries.
+- Computes weighted lexical scores across six business domains (`orders`, `payments`, `deliveries`, `returns`, `refunds`, `general`).
+- Applies contextual disambiguation heuristics, such as distinguishing refund status inquiries from physical return requests.
+- Emits a structured `ClassificationResult` containing the top category, confidence (0.0 to 1.0), detected keywords, and execution latency trace.
 
-### 3. Response Agent
+### 2. Knowledge Agent (`KnowledgeAgent`)
 
-**File:** `agents/response_agent.py`
+- **Role:** FAQ Knowledge Specialist
+- **Source:** `agents/knowledge_agent.py`
 
 Responsibilities:
 
-- Generates clear and professional customer support responses.
-- Uses retrieved FAQ information as its factual source.
-- Includes relevant policy conditions.
-- Suggests related FAQ information when applicable.
-- Refuses to guess when verified information is unavailable.
-- Provides human-support escalation details when appropriate.
+- Indexes and maintains the 29-entry predefined knowledge base in `knowledge_base/faq_data.json`.
+- Uses multi-aspect relevance scoring:
+  - Exact query matching against canonical and alternative questions.
+  - Token Jaccard similarity with suffix normalization.
+  - Multi-word keyword phrase boosting.
+  - Category-scoped search with cross-domain fallback.
+- Enforces a minimum relevance threshold (`0.25`). If no FAQ meets the threshold, returns `status = "not_found"`.
+- Emits a structured `KnowledgeResult` with the top match, relevance score, related items, and execution trace.
+
+### 3. Response Agent (`ResponseAgent`)
+
+- **Role:** Customer Support Specialist
+- **Source:** `agents/response_agent.py`
+
+Responsibilities:
+
+- Synthesizes clear, empathetic, and professional customer service answers.
+- Constrains factual claims to the content of the retrieved FAQ.
+- Injects verified policy notices, conditions, and SLA timeframes.
+- Suggests related FAQ articles when applicable.
+- Enforces Requirement 5: if knowledge is unavailable or out-of-scope, refuses to invent details, explains that verified FAQ information is absent, and provides human representative contact details.
+- Emits a structured `ResponseResult` with `is_grounded`, `grounding_source_id`, and an audit trail.
+
+---
 
 ## 📚 Knowledge Base Coverage
 
-The predefined knowledge base contains 29 FAQ records.
+The predefined knowledge repository (`knowledge_base/faq_data.json`) contains 29 realistic e-commerce FAQ records across all six domains:
 
-| Category | FAQ IDs | Coverage |
+| Category | FAQ ID Range | Topics Covered |
 |---|---|---|
-| Orders | ORD-001 to ORD-006 | Tracking, cancellation, modifications, invoices |
-| Payments | PAY-001 to PAY-005 | Payment methods, security, declined payments |
-| Deliveries | DEL-001 to DEL-006 | Shipping, delivery delays, international delivery |
-| Returns | RET-001 to RET-005 | Return policies, labels, shipping fees |
-| Refunds | REF-001 to REF-005 | Refund processing, timelines, investigations |
-| General | GEN-001 to GEN-003 | Account support, contact information, password reset |
+| **Orders** | `ORD-001` – `ORD-006` | Order placement, 30-minute cancellation/modification window, live shipment tracking, address changes, VAT invoice downloads, order confirmation |
+| **Payments** | `PAY-001` – `PAY-005` | Accepted payment methods, payment security, declined card troubleshooting, Cash on Delivery limits, installment payments |
+| **Deliveries** | `DEL-001` – `DEL-006` | Standard delivery, express/same-day shipping, free shipping threshold, international shipping, missed delivery attempts, delivery delay resolution |
+| **Returns** | `RET-001` – `RET-005` | Return policy, non-returnable items, return label generation, return shipping fees, packaging and condition guidelines |
+| **Refunds** | `REF-001` – `REF-005` | Refund processing times, original payment method, store credit option, voucher deductions, missing refund investigations |
+| **General** | `GEN-001` – `GEN-003` | Customer care operating hours, phone/email support, account creation, password reset |
 
-## 🛡️ Anti-Hallucination Guardrail
+---
 
-One of the main requirements is to prevent the assistant from generating unsupported answers.
+## 🛡️ Anti-Hallucination Engine (Requirement 5)
 
-ShopSmart AI implements a relevance-based verification mechanism.
+A core requirement is to **avoid inventing answers when information is unavailable**. The system implements a deterministic two-phase guardrail:
 
-**When relevant information is found:**
-- The retrieved FAQ is passed to the Response Agent.
-- The response is generated using verified knowledge base information.
-- The result is marked as grounded.
+```mermaid
+flowchart LR
+    K[Knowledge Agent Search] --> Check{Relevance Score >= 0.25?}
+    Check -->|Yes| Matched[Status: Found<br/>Pass Record to Response Agent]
+    Check -->|No| Miss[Status: Not Found<br/>Flag Information Unavailable]
 
-**When relevant information is unavailable:**
-- The system returns `not_found`.
-- The Response Agent refuses to invent an answer.
-- The customer is informed that verified information is unavailable.
-- Human support escalation is suggested.
+    Matched --> Grounded[Generate Response<br/>is_grounded: true<br/>Facts from FAQ Knowledge Base]
+    Miss --> Refusal[Safe Refusal<br/>is_grounded: false<br/>Do not guess<br/>Offer Human Support]
+```
 
-Example:
+**Refusal Guarantee:** When the knowledge base does not contain sufficiently relevant information, the assistant does not fabricate delivery windows, return policies, or refund terms. It transparently states that verified information is unavailable and recommends human support.
 
-**Customer Question:**
-"Can you deliver my order via spaceship to Mars?"
-
-**System Result:**
-The knowledge base cannot verify this delivery policy, so the assistant refuses to guess.
+---
 
 ## 💻 Technology Stack
 
-| Component | Technology |
-|---|---|
-| Programming Language | Python |
-| Backend | Python HTTP Server |
-| Frontend | HTML5, CSS3, JavaScript |
-| Agent Architecture | Collaborative Multi-Agent System |
-| Knowledge Storage | JSON |
-| API | REST API |
-| Testing | Python unittest |
-| Dependencies | Python Standard Library |
+- **Runtime:** Python 3.10+ (Standard Library: `http.server`, `urllib`, `json`, `dataclasses`, `unittest`, `re`).
+- **Dependencies:** Zero external Python package dependencies required.
+- **Frontend:** Responsive dashboard built with semantic HTML5, modern CSS3, and vanilla JavaScript.
+- **Testing:** Python `unittest` suite with 45 unit, integration, and DOM tests.
+- **LLM Augmentation:** `agents/llm_client.py` performs an optional provider connectivity check only; it does not generate customer answers.
 
-**Implementation Note:** The current version uses deterministic intent classification, FAQ retrieval, and template-based grounded response generation. The optional `llm_client.py` checks provider connectivity only; it does not generate customer answers through a live LLM.
+---
 
-## 📂 Project Structure
+## 📂 Project Directory Layout
 
 ```text
 ShopSmart-AI/
-│
-├── agents/
-│   ├── __init__.py
-│   ├── base_agent.py
-│   ├── classifier_agent.py
-│   ├── knowledge_agent.py
-│   ├── response_agent.py
-│   └── llm_client.py
-│
 ├── knowledge_base/
-│   └── faq_data.json
-│
+│   └── faq_data.json          # Predefined 29-entry FAQ Knowledge Base
+├── agents/
+│   ├── __init__.py            # Module exports
+│   ├── base_agent.py          # Abstract BaseAgent and AgentTrace
+│   ├── classifier_agent.py    # Agent 1: FAQ Classifier
+│   ├── knowledge_agent.py     # Agent 2: Knowledge Agent
+│   ├── response_agent.py      # Agent 3: Response Agent
+│   └── llm_client.py          # Optional provider connectivity probe
+├── assistant.py               # Main multi-agent orchestrator
+├── main.py                    # Multi-mode CLI tool
+├── server.py                  # HTTP API server and web dashboard host
+├── web/
+│   └── index.html             # Enterprise web dashboard
 ├── tests/
 │   ├── __init__.py
-│   ├── test_faq_assistant.py
-│   └── test_frontend_dom.py
-│
-├── web/
-│   └── index.html
-│
-├── assistant.py
-├── main.py
-├── server.py
-├── .env.example
-├── .gitignore
-└── README.md
+│   ├── test_faq_assistant.py  # 42 unit and integration tests
+│   └── test_frontend_dom.py   # 3 DOM and JavaScript syntax tests
+├── assets/
+│   └── shopsmart-banner.gif   # Animated project banner
+├── .env.example               # Environment configuration template
+├── .gitignore                 # Git ignore rules
+└── README.md                  # Project documentation
 ```
+
+---
 
 ## ⚡ Installation & Setup
 
@@ -200,67 +199,71 @@ git clone https://github.com/haniaeman2026-pixel/ShopSmart-AI.git
 cd ShopSmart-AI
 ```
 
-### 3. Verify Python
+### 3. Verify Python 3.10 or Newer
 
 ```bash
 py --version
 ```
 
-Python 3.10 or newer is recommended.
+### 4. Optional Environment Configuration
 
-### 4. Run the Application
+The current implementation runs locally without API keys. It uses deterministic classification, FAQ retrieval, and grounded response templates; no external LLM inference is performed.
 
-No external Python packages are required for the current implementation.
+---
 
 ## 🚀 Execution & Run Guide
 
-### Launch the Web Dashboard
-
-```bash
-py server.py 8010
-```
-
-Open the application:
-
-```text
-http://localhost:8010/
-```
-
-### Run the Predefined Demo
+### 1. Run Predefined Demo Suite
 
 ```bash
 py main.py
 ```
 
-### Ask a Single Question
+### 2. Single Question via CLI
 
 ```bash
 py main.py --question "How long does standard delivery take?"
 ```
 
-### Get JSON Output
+### 3. Machine-Readable JSON Output
 
 ```bash
 py main.py --question "When will I receive my refund?" --json
 ```
 
-### Interactive Terminal Mode
+### 4. Interactive Terminal Session
 
 ```bash
 py main.py --interactive
 ```
 
+### 5. Launch the Web Dashboard
+
+```bash
+py server.py 8010
+```
+
+Open your browser at:
+
+```text
+http://localhost:8010/
+```
+
+---
+
 ## 🌐 REST API Documentation
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/health` | Service health and agent status |
-| GET | `/api/kb` | Knowledge base records |
-| GET | `/api/history` | Inquiry session history |
-| POST | `/api/ask` | Complete multi-agent workflow |
-| POST | `/api/classify` | FAQ classification |
-| POST | `/api/retrieve` | Knowledge retrieval |
-| POST | `/api/respond` | Response generation |
+The server exposes dedicated REST endpoints for the complete pipeline as well as individual agent inspection:
+
+| Method | Endpoint | Description | Request Body |
+|---|---|---|---|
+| `GET` | `/api/health` | Service health, active agents, and LLM provider status | None |
+| `GET` | `/api/kb` | Returns full knowledge base entries and metadata | None |
+| `GET` | `/api/history` | Chronological session inquiry history | None |
+| `POST` | `/api/ask` | End-to-end multi-agent pipeline execution | `{"question": "..."}` |
+| `POST` | `/api/classify` | Invokes Agent 1 (FAQ Classifier) | `{"question": "..."}` |
+| `POST` | `/api/retrieve` | Invokes Agent 2 (Knowledge Agent) | `{"query": "...", "category": "..."}` |
+| `POST` | `/api/respond` | Invokes Agent 3 (Response Agent) | `{"question": "...", "category": "..."}` |
 
 Example request:
 
@@ -270,57 +273,101 @@ Example request:
 }
 ```
 
-## 🧪 Automated Test Suite
+---
 
-The project includes **45 automated tests** covering the multi-agent workflow, knowledge retrieval, API functionality, and frontend integrity.
+## 🧪 Automated Test Suite (45 Tests)
 
-Run the complete test suite:
+Run all 45 unit, integration, scenario, and DOM tests:
 
 ```bash
 py -m unittest discover -s tests -v
 ```
 
-Test coverage includes:
+### Test Coverage Summary
 
-- Six core assignment scenarios
-- FAQ classification
-- Knowledge base retrieval
-- Response generation
-- Anti-hallucination guardrails
-- End-to-end pipeline execution
-- REST API endpoints
-- Frontend structure and JavaScript syntax
+- **`TestAssignmentSixScenarios` (6 tests):** Validates Scenarios 1 through 6.
+- **`TestFAQClassifierAgent` (14 tests):** Validates classification across supported categories and edge cases.
+- **`TestKnowledgeAgent` (6 tests):** Validates knowledge base indexing, exact matching, retrieval, empty queries, and threshold gating.
+- **`TestResponseAgent` (2 tests):** Validates grounded answer synthesis and anti-hallucination refusal formatting.
+- **`TestEndToEndPipeline` (4 tests):** Validates trace propagation, latency, serialization, and LLM status structure.
+- **`TestHTTPAPIEndpoints` (9 tests):** Validates API routes, bad-request handling, and 404 routing.
+- **`TestFrontendIntegrity` (3 tests):** Validates HTML structure, required DOM IDs, and JavaScript syntax verification.
 
 **Verified Result:** All 45 tests passed.
 
+---
+
 ## 🎯 Six Core Assignment Scenarios
 
-| Scenario | Customer Inquiry | Expected Result |
-|---|---|---|
-| 1. Order Tracking | How can I track my order? | ORD-003 retrieved |
-| 2. Payment Methods | Which payment methods do you accept? | PAY-001 retrieved |
-| 3. Delivery Delay | My delivery is delayed. What should I do? | DEL-006 retrieved |
-| 4. Return Procedures | How can I return a product? | Return FAQ retrieved |
-| 5. Refund Timeline | When will I receive my refund? | REF-001 retrieved |
-| 6. Missing Policy | Can you deliver via spaceship to Mars? | Safe refusal |
+The six scenarios from the assignment are covered by the automated tests:
 
-All six assignment scenarios have been successfully tested.
+### Scenario 1: Order Tracking
 
-## 🔒 Security & Reliability
+- **Input:** "How can I track my order?"
+- **Agent 1:** Classifies the inquiry into `orders`.
+- **Agent 2:** Retrieves FAQ `ORD-003`.
+- **Agent 3:** Returns a grounded response with shipment tracking guidance.
+- **Status:** **PASS**
 
-- No API keys are required for the current deterministic workflow.
-- Environment files are excluded from version control.
-- Customer responses are grounded in the local FAQ knowledge base.
-- Unsupported questions trigger a safe refusal.
-- Agent execution traces support workflow inspection.
+### Scenario 2: Payment Methods
 
-## 👩‍💻 Developer
+- **Input:** "Which payment methods do you accept?"
+- **Agent 1:** Classifies the inquiry into `payments`.
+- **Agent 2:** Retrieves FAQ `PAY-001`.
+- **Agent 3:** Returns a grounded response listing the payment methods recorded in the FAQ.
+- **Status:** **PASS**
 
-**Developed by Hania Eman**
+### Scenario 3: Delivery Delay
 
-GitHub: [haniaeman2026-pixel](https://github.com/haniaeman2026-pixel)
+- **Input:** "My delivery is delayed. What should I do?"
+- **Agent 1:** Classifies the inquiry into `deliveries`.
+- **Agent 2:** Retrieves FAQ `DEL-006`.
+- **Agent 3:** Explains tracking checks and the documented support escalation process.
+- **Status:** **PASS**
+
+### Scenario 4: Return Procedures
+
+- **Input:** "How can I return a product?"
+- **Agent 1:** Classifies the inquiry into `returns`.
+- **Agent 2:** Retrieves the relevant return FAQ.
+- **Agent 3:** Provides the documented return process.
+- **Status:** **PASS**
+
+### Scenario 5: Refund Timeline
+
+- **Input:** "When will I receive my refund?"
+- **Agent 1:** Classifies the inquiry into `refunds`.
+- **Agent 2:** Retrieves FAQ `REF-001`.
+- **Agent 3:** Explains the refund processing timeline documented in the FAQ.
+- **Status:** **PASS**
+
+### Scenario 6: Missing Policy — Anti-Hallucination Guardrail
+
+- **Input:** "Can you deliver my order via spaceship to Mars?"
+- **Agent 1:** Classifies the inquiry for retrieval.
+- **Agent 2:** Finds no sufficiently relevant FAQ; the relevance score is below the `0.25` threshold.
+- **Agent 3:** Refuses to guess, explains that the policy is unavailable, and directs the customer to the configured support channel.
+- **Status:** **PASS**
 
 ---
+
+## Important Implementation Note
+
+This submission uses a deterministic three-agent pipeline: rule-based intent classification, FAQ retrieval, and template-based grounded response generation. The optional `llm_client.py` performs a provider connectivity check only; it is **not** connected to answer generation. Do not describe the current build as using live generative LLM inference unless that integration is implemented and tested separately.
+
+The web server serves `web/index.html` at `/`. If the browser shows a JSON 404 response, stop any older server process using the selected port, then start this project's server from the project root:
+
+```bash
+py server.py 8010
+```
+
+Confirm the terminal reports the ShopSmart URL before opening `http://localhost:8010/`.
+
+---
+
+<p align="center">
+  **Developed by Hania Eman**
+</p>
 
 <p align="center">
   Built with Python and a collaborative multi-agent architecture.
