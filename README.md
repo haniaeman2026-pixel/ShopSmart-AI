@@ -1,9 +1,25 @@
 
 <p align="center">
   <img
-    src="https://readme-typing-svg.demolab.com?font=Arial&weight=800&size=42&duration=2500&pause=1000&color=000000&center=true&vCenter=true&width=750&height=90&lines=ShopSmart+AI;Autonomous+Multi-Agent+FAQ+Assistant"
-    alt="ShopSmart AI Animated Title"
+    src="https://readme-typing-svg.demolab.com?font=Montserrat&weight=800&size=48&duration=2800&pause=1100&color=4056A1&center=true&vCenter=true&width=850&height=100&lines=ShopSmart+AI;Autonomous+Multi-Agent+FAQ+Assistant"
+    alt="ShopSmart AI — Autonomous Multi-Agent FAQ Assistant"
   />
+</p>
+
+<p align="center">
+  <strong>
+    Intelligent Customer Support • Collaborative Agents • Grounded Responses
+  </strong>
+</p>
+
+<p align="center">
+
+[![Tests](https://img.shields.io/badge/Tests-45%20Automated-brightgreen)](#-automated-test-suite-45-tests)
+[![Architecture](https://img.shields.io/badge/Architecture-Collaborative%20Multi--Agent-blue)](#-multi-agent-system-architecture)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](#-installation--setup)
+[![Dependencies](https://img.shields.io/badge/External%20Dependencies-Zero%20(Standard%20Library)-success)](#-technology-stack)
+[![Anti--Hallucination](https://img.shields.io/badge/Guardrail-Strict%20Anti--Hallucination-purple)](#-anti-hallucination-engine-requirement-5)
+
 </p>
 
 <p align="center">
