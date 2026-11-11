@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopSmart — Multi-Agent AI Support Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #090d16;
+      --bg-surface: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #24344d;
+      --border-subtle: #334155;
+      --border-focus: #3b82f6;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-blue: #3b82f6;
+      --accent-indigo: #6366f1;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-purple: #8b5cf6;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation */
+    header {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: #fff;
+    }
+
+    .brand-text h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .telemetry-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .telemetry-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px var(--accent-emerald);
+    }
+
+    /* Layout */
+    .app-main {
+      flex: 1;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1080px) {
+      .app-main { grid-template-columns: 1fr; }
+    }
+
+    /* Left Control Column */
+    .column-left {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    textarea:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: var(--accent-blue);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s, transform 0.05s;
+    }
+
+    .btn-primary:hover { background: #2563eb; }
+    .btn-primary:active { transform: scale(0.99); }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    /* Scenario Buttons */
+    .scenario-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .scenario-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: var(--text-primary);
+      font-size: 0.82rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: all 0.15s;
+    }
+
+    .scenario-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-focus);
+    }
+
+    .scenario-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Right Output Column */
+    .column-right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Pipeline Step Cards */
+    .pipeline-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .agent-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px 20px;
+      position: relative;
+    }
+
+    .agent-card.agent-1 { border-left: 4px solid var(--accent-blue); }
+    .agent-card.agent-2 { border-left: 4px solid var(--accent-amber); }
+    .agent-card.agent-3 { border-left: 4px solid var(--accent-emerald); }
+
+    .agent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .agent-identity {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .agent-role-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .pill-blue { background: rgba(59, 130, 246, 0.15); color: #93c5fd; }
+    .pill-amber { background: rgba(245, 158, 11, 0.15); color: #fde047; }
+    .pill-emerald { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+
+    .agent-metric {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .agent-body {
+      font-size: 0.88rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+    }
+
+    /* Final Response Box */
+    .response-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .grounding-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .grounding-verified {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #6ee7b7;
+    }
+
+    .grounding-refusal {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fde047;
+    }
+
+    .response-text-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 18px;
+      white-space: pre-wrap;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #f1f5f9;
+    }
+
+    .copy-btn {
+      align-self: flex-end;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+    .copy-btn:hover { color: #fff; border-color: var(--text-secondary); }
+
+    /* History Table */
+    .history-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .history-item:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-focus);
+    }
+
+    /* JSON Debug View */
+    .json-box {
+      display: none;
+      background: #020617;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #94a3b8;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--accent-blue);
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <div class="brand-wrap">
+        <div class="brand-icon">🛍️</div>
+        <div class="brand-text">
+          <h1>ShopSmart AI Customer Operations</h1>
+          <p>Multi-Agent Collaborative Support Architecture</p>
+        </div>
+      </div>
+
+      <div class="telemetry-bar">
+        <div class="telemetry-chip">
+          <span class="status-dot"></span>
+          <span>Backend Online</span>
+        </div>
+        <div class="telemetry-chip">
+          <span>Total FAQs:</span>
+          <strong id="faqCountLabel">29</strong>
+        </div>
+        <div class="telemetry-chip">
+          <span>Engine:</span>
+          <strong id="engineModeLabel">Specialist Suite</strong>
+        </div>
+        <div class="telemetry-chip">
+          <span>Pipeline Latency:</span>
+          <strong id="topLatencyLabel" style="font-family: var(--font-mono);">0.0 ms</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid Workspace -->
+  <main class="app-main">
+
+    <!-- Left Controls & Test Cases -->
+    <div class="column-left">
+
+      <!-- Input Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>Customer Inquiry</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Ctrl + Enter to Submit</span>
+        </div>
+
+        <div class="input-area">
+          <textarea id="questionInput" placeholder="Enter customer inquiry regarding orders, payments, deliveries, returns, or refunds..."></textarea>
+          
+          <div class="button-row">
+            <button id="submitBtn" class="btn-primary" onclick="submitInquiry()">
+              <span id="btnSpinner" class="spinner" style="display: none;"></span>
+              <span id="btnText">Process Question →</span>
+            </button>
+            <button class="btn-secondary" onclick="clearInput()">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scenarios Presets (6 Required Assignment Scenarios) -->
+      <div class="card">
+        <div class="card-title">
+          <span>Required Test Scenarios</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">Click to Execute</span>
+        </div>
+
+        <div class="scenario-grid">
+          <button class="scenario-btn" onclick="runScenario('How can I track my order?')">
+            <span class="scenario-tag">Scenario 1: Orders (Tracking)</span>
+            <span>"How can I track my order?"</span>
+          </button>
+
+          <button class="scenario-btn" onclick="runScenario('Which payment methods do you accept?')">
+            <span class="scenario-tag">Scenario 2: Payments (Methods)</span>
+            <span>"Which payment methods do you accept?"</span>
+          </button>
+
+          <button class="scenario-btn" onclick="runScenario('My delivery is delayed. What should I do?')">
+            <span class="scenario-tag">Scenario 3: Delivery (Delays)</span>
+            <span>"My delivery is delayed. What should I do?"</span>
+          </button>
+
+          <button class="scenario-btn" onclick="runScenario('How can I return a product?')">
+            <span class="scenario-tag">Scenario 4: Returns (Procedures)</span>
+            <span>"How can I return a product?"</span>
+          </button>
+
+          <button class="scenario-btn" onclick="runScenario('When will I receive my refund?')">
+            <span class="scenario-tag">Scenario 5: Refunds (Processing Timeline)</span>
+            <span>"When will I receive my refund?"</span>
+          </button>
+
+          <button class="scenario-btn" onclick="runScenario('Can you deliver my order via spaceship to Mars?')">
+            <span class="scenario-tag" style="color: var(--accent-amber);">Scenario 6: Missing Policy (Anti-Hallucination)</span>
+            <span>"Can you deliver my order via spaceship to Mars?"</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Inquiries History -->
+      <div class="history-card">
+        <div class="card-title">
+          <span>Session Inquiries History</span>
+          <span id="historyCount" style="font-size: 0.72rem; color: var(--text-muted);">0 items</span>
+        </div>
+        <div id="historyList" class="history-list">
+          <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 14px 0;">
+            No inquiries recorded yet this session.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Multi-Agent Execution Results -->
+    <div class="column-right">
+
+      <!-- Pipeline Execution Breakdown -->
+      <div class="pipeline-grid">
+
+        <!-- Agent 1: FAQ Classifier -->
+        <div class="agent-card agent-1">
+          <div class="agent-header">
+            <div class="agent-identity">
+              <span class="agent-role-pill pill-blue">Agent 1: FAQ Classifier</span>
+              <span style="font-weight: 600; font-size: 0.85rem;">Question Classification Specialist</span>
+            </div>
+            <span id="tClassifier" class="agent-metric">0.0 ms</span>
+          </div>
+          <div class="agent-body">
+            <div>
+              <strong>Classified Category:</strong>
+              <span id="categoryPill" class="category-badge">Pending</span>
+              <span id="confidenceText" style="margin-left: 8px; font-size: 0.8rem; color: var(--text-secondary);">Confidence: --</span>
+            </div>
+            <div id="classifierReasoning" style="font-size: 0.82rem; color: var(--text-secondary);">
+              Waiting for customer question...
+            </div>
+            <div id="classifierKeywords" style="font-size: 0.78rem; color: var(--text-muted);"></div>
+          </div>
+        </div>
+
+        <!-- Agent 2: Knowledge Agent -->
+        <div class="agent-card agent-2">
+          <div class="agent-header">
+            <div class="agent-identity">
+              <span class="agent-role-pill pill-amber">Agent 2: Knowledge Agent</span>
+              <span style="font-weight: 600; font-size: 0.85rem;">FAQ Knowledge Specialist</span>
+            </div>
+            <span id="tKnowledge" class="agent-metric">0.0 ms</span>
+          </div>
+          <div class="agent-body">
+            <div>
+              <strong>Retrieval Status:</strong>
+              <span id="knowledgeStatus" style="font-family: var(--font-mono); font-size: 0.8rem; color: #fde047;">PENDING</span>
+              <span id="knowledgeScore" style="margin-left: 8px; font-size: 0.8rem; color: var(--text-secondary);">Top Score: --</span>
+            </div>
+            <div id="knowledgeSummary" style="font-size: 0.82rem; color: var(--text-secondary);">
+              Knowledge base awaiting classified intent.
+            </div>
+            <div id="knowledgeMatchedFaq" style="font-size: 0.78rem; color: var(--text-muted);"></div>
+          </div>
+        </div>
+
+        <!-- Agent 3: Response Agent -->
+        <div class="agent-card agent-3">
+          <div class="agent-header">
+            <div class="agent-identity">
+              <span class="agent-role-pill pill-emerald">Agent 3: Response Agent</span>
+              <span style="font-weight: 600; font-size: 0.85rem;">Customer Support Specialist</span>
+            </div>
+            <span id="tResponse" class="agent-metric">0.0 ms</span>
+          </div>
+          <div class="agent-body">
+            <div>
+              <strong>Policy Compliance:</strong>
+              <span id="responseStatus" style="font-size: 0.8rem; color: #6ee7b7;">Grounding Guardrail Active</span>
+            </div>
+            <div id="responseSummary" style="font-size: 0.82rem; color: var(--text-secondary);">
+              Response synthesis ready.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Final Customer Response Display -->
+      <div class="response-card">
+        <div class="card-title" style="margin-bottom: 0;">
+          <span>Customer-Facing Answer</span>
+          <button class="copy-btn" onclick="copyResponse()">📋 Copy Response</button>
+        </div>
+
+        <div id="groundingBanner" class="grounding-banner grounding-verified" style="display: none;">
+          <span id="groundingText">✓ Verified Factual Support</span>
+          <span id="faqSourceTag" style="font-family: var(--font-mono); font-size: 0.75rem;">Source: NONE</span>
+        </div>
+
+        <div id="responseTextBox" class="response-text-box">
+          Submit an inquiry from the panel on the left to see the complete multi-agent workflow and final grounded answer.
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <button class="btn-secondary" style="font-size: 0.75rem; padding: 4px 10px;" onclick="toggleDebugJson()">
+            Toggle JSON Trace
+          </button>
+          <span id="totalLatencyFooter" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">
+            Latency: --
+          </span>
+        </div>
+
+        <pre id="jsonDebugView" class="json-box"></pre>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    let latestData = null;
+
+    // Hotkey: Ctrl + Enter to submit
+    document.getElementById('questionInput').addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        submitInquiry();
+      }
+    });
+
+    async function initDashboard() {
+      try {
+        const resp = await fetch('/api/health');
+        const data = await resp.json();
+        if (data.agents && data.agents.knowledge) {
+          document.getElementById('faqCountLabel').textContent = data.agents.knowledge.total_faqs || '29';
+        }
+        if (data.llm_provider) {
+          document.getElementById('engineModeLabel').textContent = data.llm_provider.engine_mode ? 'Specialist Engine' : 'Online';
+        }
+        refreshHistory();
+      } catch (err) {
+        console.warn('Backend probe warning:', err);
+      }
+    }
+
+    function runScenario(questionText) {
+      document.getElementById('questionInput').value = questionText;
+      submitInquiry();
+    }
+
+    function clearInput() {
+      document.getElementById('questionInput').value = '';
+      document.getElementById('questionInput').focus();
+    }
+
+    async function submitInquiry() {
+      const inputEl = document.getElementById('questionInput');
+      const question = inputEl.value.trim();
+      if (!question) return;
+
+      const btnSpinner = document.getElementById('btnSpinner');
+      const btnText = document.getElementById('btnText');
+      const submitBtn = document.getElementById('submitBtn');
+
+      btnSpinner.style.display = 'inline-block';
+      btnText.textContent = 'Processing...';
+      submitBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question })
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.error || `HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        latestData = data;
+        renderPipeline(data);
+        refreshHistory();
+      } catch (err) {
+        alert('Error processing inquiry: ' + err.message);
+      } finally {
+        btnSpinner.style.display = 'none';
+        btnText.textContent = 'Process Question →';
+        submitBtn.disabled = false;
+      }
+    }
+
+    function renderPipeline(data) {
+      // Latencies
+      document.getElementById('topLatencyLabel').textContent = `${data.total_time_ms} ms`;
+      document.getElementById('totalLatencyFooter').textContent = `Total Pipeline Latency: ${data.total_time_ms} ms`;
+
+      const traces = data.agent_traces || [];
+      const t1 = traces.find(t => t.agent_name === 'FAQ Classifier') || {};
+      const t2 = traces.find(t => t.agent_name === 'Knowledge Agent') || {};
+      const t3 = traces.find(t => t.agent_name === 'Response Agent') || {};
+
+      document.getElementById('tClassifier').textContent = `${t1.execution_time_ms || 0} ms`;
+      document.getElementById('tKnowledge').textContent = `${t2.execution_time_ms || 0} ms`;
+      document.getElementById('tResponse').textContent = `${t3.execution_time_ms || 0} ms`;
+
+      // 1. Classifier
+      const categoryPill = document.getElementById('categoryPill');
+      categoryPill.textContent = data.category;
+      document.getElementById('confidenceText').textContent = `Confidence: ${(data.classification.confidence * 100).toFixed(1)}%`;
+      document.getElementById('classifierReasoning').textContent = t1.decision_summary || data.classification.intent_description;
+      const kwList = data.classification.detected_keywords || [];
+      document.getElementById('classifierKeywords').textContent = kwList.length ? `Detected Keywords: [${kwList.join(', ')}]` : 'No domain keywords detected';
+
+      // 2. Knowledge
+      const kStatus = document.getElementById('knowledgeStatus');
+      kStatus.textContent = (data.knowledge.status || 'not_found').toUpperCase();
+      document.getElementById('knowledgeScore').textContent = `Top Score: ${(data.knowledge.top_score * 100).toFixed(1)}%`;
+      document.getElementById('knowledgeSummary').textContent = t2.decision_summary || 'Knowledge search evaluated';
+      if (data.knowledge.best_match) {
+        document.getElementById('knowledgeMatchedFaq').textContent = `Matched Entry: ${data.knowledge.best_match.id} — "${data.knowledge.best_match.question}"`;
+      } else {
+        document.getElementById('knowledgeMatchedFaq').textContent = 'No matching entry met the relevance threshold.';
+      }
+
+      // 3. Response Agent
+      document.getElementById('responseSummary').textContent = t3.decision_summary || 'Customer response formulated';
+
+      // Final Response & Grounding Banner
+      const banner = document.getElementById('groundingBanner');
+      banner.style.display = 'flex';
+      if (data.is_grounded) {
+        banner.className = 'grounding-banner grounding-verified';
+        document.getElementById('groundingText').textContent = '✓ Strictly Grounded in Predefined Knowledge Base';
+        document.getElementById('faqSourceTag').textContent = `Record: ${data.grounding_source_id}`;
+      } else {
+        banner.className = 'grounding-banner grounding-refusal';
+        document.getElementById('groundingText').textContent = '🛡️ Anti-Hallucination Safe Refusal (Information Unavailable)';
+        document.getElementById('faqSourceTag').textContent = 'Refusal / Human Escalation';
+      }
+
+      document.getElementById('responseTextBox').textContent = data.response_text;
+      document.getElementById('jsonDebugView').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function refreshHistory() {
+      try {
+        const resp = await fetch('/api/history');
+        const data = await resp.json();
+        const history = data.history || [];
+        const container = document.getElementById('historyList');
+        document.getElementById('historyCount').textContent = `${history.length} items`;
+
+        if (!history.length) {
+          container.innerHTML = '<div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 14px 0;">No inquiries recorded yet this session.</div>';
+          return;
+        }
+
+        container.innerHTML = history.map(item => `
+          <div class="history-item" onclick="loadHistoryItem(${JSON.stringify(item.question).replace(/"/g, '&quot;')})">
+            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 320px;">
+              <strong>[${item.category}]</strong> ${escapeHtml(item.question)}
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">${item.latency_ms}ms</span>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.warn('History refresh error:', err);
+      }
+    }
+
+    function loadHistoryItem(question) {
+      document.getElementById('questionInput').value = question;
+      submitInquiry();
+    }
+
+    function copyResponse() {
+      const text = document.getElementById('responseTextBox').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Response copied to clipboard!');
+      }).catch(() => {
+        alert('Unable to copy automatically.');
+      });
+    }
+
+    function toggleDebugJson() {
+      const box = document.getElementById('jsonDebugView');
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function escapeHtml(text) {
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // Initialize dashboard on load
+    window.addEventListener('DOMContentLoaded', initDashboard);
+  </script>
+</body>
+</html>

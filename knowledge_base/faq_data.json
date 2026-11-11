@@ -1,0 +1,620 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "company": "ShopSmart Online Retail",
+    "support_email": "support@shopsmart.example.com",
+    "support_phone": "1-800-555-SHOP (09:00 - 18:00 EST)",
+    "categories": [
+      "orders",
+      "payments",
+      "deliveries",
+      "returns",
+      "refunds",
+      "general"
+    ]
+  },
+  "faqs": [
+    {
+      "id": "ORD-001",
+      "category": "orders",
+      "question": "How do I place an order?",
+      "alternative_questions": [
+        "How can I buy products on your site?",
+        "Steps to make a purchase",
+        "How do I checkout?"
+      ],
+      "keywords": [
+        "place order",
+        "buy",
+        "purchase",
+        "checkout",
+        "cart",
+        "ordering"
+      ],
+      "answer": "To place an order, browse our catalog, select your desired items and quantities, and click 'Add to Cart'. When you're ready, click the Shopping Cart icon and select 'Proceed to Checkout'. Follow the prompts to enter your shipping address, choose your preferred delivery method, enter payment details, and click 'Place Order'. You will receive an immediate confirmation email with your order number.",
+      "conditions": "Valid account or guest checkout with a verified email address."
+    },
+    {
+      "id": "ORD-002",
+      "category": "orders",
+      "question": "Can I cancel or modify my order after placing it?",
+      "alternative_questions": [
+        "How to cancel my order?",
+        "Can I edit my order items?",
+        "Can I change the quantity in an order already placed?"
+      ],
+      "keywords": [
+        "cancel order",
+        "modify order",
+        "change order",
+        "edit items",
+        "stop order",
+        "cancellation"
+      ],
+      "answer": "You can cancel or modify your order within 30 minutes of placing it by visiting 'My Orders' > 'Order Details' > 'Cancel Order'. After 30 minutes, orders enter our automated fulfillment process and cannot be modified or canceled. However, once the package arrives, you can initiate a standard return within 30 days.",
+      "conditions": "Cancellation is strictly limited to 30 minutes post-purchase before warehouse processing."
+    },
+    {
+      "id": "ORD-003",
+      "category": "orders",
+      "question": "How do I track my order status?",
+      "alternative_questions": [
+        "Where is my order?",
+        "How can I see tracking information?",
+        "Track package status",
+        "Order status check"
+      ],
+      "keywords": [
+        "track order",
+        "tracking number",
+        "order status",
+        "where is my order",
+        "shipment tracking",
+        "courier update"
+      ],
+      "answer": "Once your order ships, we send a shipping confirmation email containing your tracking number and carrier link. You can also view live tracking updates anytime by logging into your account, navigating to 'My Orders', and clicking 'Track Package'. Tracking details usually update within 24 hours of dispatch.",
+      "conditions": "Tracking numbers activate within 24 hours of carrier handover."
+    },
+    {
+      "id": "ORD-004",
+      "category": "orders",
+      "question": "Can I change my delivery address after placing an order?",
+      "alternative_questions": [
+        "Change shipping address for an order",
+        "I entered the wrong address, can I update it?",
+        "Update shipping destination"
+      ],
+      "keywords": [
+        "change address",
+        "wrong address",
+        "update shipping address",
+        "modify destination",
+        "new delivery address"
+      ],
+      "answer": "You can update your shipping address within 30 minutes of order placement from your 'Order Details' page. Once the order has been processed for packing or dispatched, our customer service team cannot redirect the shipment. In that case, please contact the courier directly using your tracking number once available.",
+      "conditions": "Allowed within 30 minutes before warehouse processing begins."
+    },
+    {
+      "id": "ORD-005",
+      "category": "orders",
+      "question": "Where can I find my order invoice or receipt?",
+      "alternative_questions": [
+        "Download invoice",
+        "How to get tax receipt?",
+        "Where is my proof of purchase?"
+      ],
+      "keywords": [
+        "invoice",
+        "receipt",
+        "proof of purchase",
+        "billing slip",
+        "tax invoice",
+        "download invoice"
+      ],
+      "answer": "A PDF copy of your tax invoice is automatically attached to your order confirmation email. You can also download it anytime by going to 'My Orders', selecting the order, and clicking 'Download Invoice (PDF)'.",
+      "conditions": "Available immediately after successful checkout."
+    },
+    {
+      "id": "PAY-001",
+      "category": "payments",
+      "question": "What payment methods do you accept?",
+      "alternative_questions": [
+        "Which payment options are available?",
+        "Do you accept credit cards and PayPal?",
+        "How can I pay for my purchase?"
+      ],
+      "keywords": [
+        "payment methods",
+        "accept payment",
+        "credit card",
+        "debit card",
+        "paypal",
+        "apple pay",
+        "google pay",
+        "visa",
+        "mastercard"
+      ],
+      "answer": "We accept major credit and debit cards (Visa, MasterCard, American Express, Discover), PayPal, Apple Pay, Google Pay, and ShopSmart Gift Cards. All transactions are processed in USD.",
+      "conditions": "Cards must be issued by supported banks with 3D Secure / CVV validation."
+    },
+    {
+      "id": "PAY-002",
+      "category": "payments",
+      "question": "Is it safe to use my credit or debit card on your website?",
+      "alternative_questions": [
+        "Is payment secure?",
+        "Is my credit card safe on your website?",
+        "Is my card safe?",
+        "Are credit card details encrypted?",
+        "Is your checkout PCI compliant?"
+      ],
+      "keywords": [
+        "payment security",
+        "safe payment",
+        "card safe",
+        "credit card safe",
+        "safe",
+        "card security",
+        "pci dss",
+        "encryption",
+        "ssl",
+        "secure checkout"
+      ],
+      "answer": "Yes, shopping with us is 100% secure. We utilize industry-standard 256-bit SSL encryption and comply with Level 1 PCI-DSS standards. We never store your full card number or CVV on our servers.",
+      "conditions": "Transactions are tokenized and processed via certified payment gateways."
+    },
+    {
+      "id": "PAY-003",
+      "category": "payments",
+      "question": "Why did my payment fail or get declined?",
+      "alternative_questions": [
+        "Payment declined at checkout",
+        "Transaction failed",
+        "Why is my card not working?"
+      ],
+      "keywords": [
+        "payment failed",
+        "card declined",
+        "payment error",
+        "transaction rejected",
+        "billing issue"
+      ],
+      "answer": "Payments usually fail due to: (1) Incorrect billing address or CVV code, (2) Insufficient funds, (3) Bank security fraud filters blocking online transactions, or (4) Expired cards. Please verify your details, contact your bank to authorize the purchase, or try an alternative payment method such as PayPal.",
+      "conditions": "Contact your issuing bank for specific authorization decline codes."
+    },
+    {
+      "id": "PAY-004",
+      "category": "payments",
+      "question": "Can I pay Cash on Delivery (COD)?",
+      "alternative_questions": [
+        "Do you offer Cash on Delivery?",
+        "Is COD available?",
+        "Can I pay when the courier arrives?"
+      ],
+      "keywords": [
+        "cash on delivery",
+        "cod",
+        "pay upon arrival",
+        "pay on delivery",
+        "cash payment"
+      ],
+      "answer": "Cash on Delivery (COD) is available only in select domestic postal codes for orders under $250. An additional processing surcharge of $3.50 applies to all COD orders. If COD is supported for your address, the option will appear at checkout.",
+      "conditions": "Only domestic eligible postal codes; order subtotal must not exceed $250."
+    },
+    {
+      "id": "PAY-005",
+      "category": "payments",
+      "question": "Do you offer installment plans or Buy Now Pay Later (BNPL)?",
+      "alternative_questions": [
+        "Can I pay in installments?",
+        "Do you support Klarna or Afterpay?",
+        "Pay later options"
+      ],
+      "keywords": [
+        "installments",
+        "bnpl",
+        "buy now pay later",
+        "klarna",
+        "afterpay",
+        "monthly payments",
+        "split payment"
+      ],
+      "answer": "Yes, we partner with Klarna and Afterpay to offer interest-free 4-installment payment plans on orders between $50 and $1,500. Select Klarna or Afterpay at checkout to split your total into 4 bi-weekly payments.",
+      "conditions": "Subject to provider credit approval. Available for eligible US/Canada customers."
+    },
+    {
+      "id": "DEL-001",
+      "category": "deliveries",
+      "question": "How long does standard delivery take?",
+      "alternative_questions": [
+        "What is the standard shipping time?",
+        "When will my package arrive?",
+        "Delivery timeframe for standard shipping"
+      ],
+      "keywords": [
+        "delivery time",
+        "standard delivery",
+        "shipping time",
+        "how long to deliver",
+        "estimated delivery",
+        "shipping duration"
+      ],
+      "answer": "Standard domestic delivery takes 3 to 5 business days from the dispatch date. Orders placed before 2:00 PM EST on business days are processed the same day. Orders placed after 2:00 PM EST or on weekends are processed on the next business day.",
+      "conditions": "Excludes public holidays and adverse weather disruptions."
+    },
+    {
+      "id": "DEL-002",
+      "category": "deliveries",
+      "question": "Do you offer same-day or express delivery?",
+      "alternative_questions": [
+        "Can I get next-day delivery?",
+        "Express shipping options",
+        "Fastest delivery available",
+        "Urgent delivery"
+      ],
+      "keywords": [
+        "express delivery",
+        "same day delivery",
+        "next day shipping",
+        "overnight delivery",
+        "fast shipping",
+        "rush delivery"
+      ],
+      "answer": "Yes! We offer Express Delivery (1-2 business days for $12.99) and Next-Day Delivery (order before 12:00 PM EST for $19.99). Same-day delivery is currently available only in select metropolitan areas for orders placed before 11:00 AM EST.",
+      "conditions": "Eligible zip codes only; cut-off times apply."
+    },
+    {
+      "id": "DEL-003",
+      "category": "deliveries",
+      "question": "What are the shipping fees?",
+      "alternative_questions": [
+        "How much does shipping cost?",
+        "Do you have free shipping?",
+        "Shipping rates"
+      ],
+      "keywords": [
+        "shipping fees",
+        "delivery cost",
+        "free shipping",
+        "shipping charges",
+        "freight cost"
+      ],
+      "answer": "Standard shipping is FREE for orders over $50! For domestic orders under $50, standard shipping is a flat rate of $4.99. Express shipping is $12.99, and Next-Day shipping is $19.99 regardless of order total.",
+      "conditions": "Free shipping applies automatically at checkout when subtotal reaches $50 after discounts."
+    },
+    {
+      "id": "DEL-004",
+      "category": "deliveries",
+      "question": "Do you ship internationally?",
+      "alternative_questions": [
+        "Worldwide shipping",
+        "Can I order from outside the United States?",
+        "International delivery countries"
+      ],
+      "keywords": [
+        "international shipping",
+        "ship overseas",
+        "worldwide delivery",
+        "global shipping",
+        "ship to canada",
+        "ship to europe"
+      ],
+      "answer": "Yes, we ship to over 50 countries worldwide. International standard delivery takes 7 to 14 business days, and international express takes 3 to 5 business days. Shipping rates and import duties/taxes are calculated and displayed at checkout.",
+      "conditions": "Recipient is responsible for local customs duties if applicable."
+    },
+    {
+      "id": "DEL-005",
+      "category": "deliveries",
+      "question": "What happens if I am not home during delivery?",
+      "alternative_questions": [
+        "Missed delivery",
+        "Courier attempted delivery while I was away",
+        "Where does carrier leave package?"
+      ],
+      "keywords": [
+        "not home",
+        "missed delivery",
+        "delivery attempt",
+        "safe drop",
+        "carrier notice",
+        "reschedule delivery"
+      ],
+      "answer": "If you are not home, the carrier will either leave the package in a safe location at your premises or leave a delivery notice card. The carrier will make up to 3 delivery attempts before holding the package at a nearby local pickup point for 5 business days.",
+      "conditions": "Signature-required packages cannot be left unattended."
+    },
+    {
+      "id": "RET-001",
+      "category": "returns",
+      "question": "What is your return policy and time window?",
+      "alternative_questions": [
+        "How many days do I have to return an item?",
+        "Return window",
+        "What is your return period?"
+      ],
+      "keywords": [
+        "return policy",
+        "return window",
+        "return days",
+        "30 days return",
+        "how to return",
+        "return period"
+      ],
+      "answer": "We offer a 30-day return policy. You can return eligible items within 30 days of the delivery date for a full refund or exchange. Items must be in their original, unused condition, with all original tags, manuals, and packaging intact.",
+      "conditions": "Return must be initiated within 30 days of delivery confirmation."
+    },
+    {
+      "id": "RET-002",
+      "category": "returns",
+      "question": "What items are not eligible for return?",
+      "alternative_questions": [
+        "Non-returnable items",
+        "Which products cannot be returned?",
+        "Are intimate items or gift cards returnable?"
+      ],
+      "keywords": [
+        "non-returnable",
+        "final sale",
+        "return exclusions",
+        "cannot return",
+        "hygiene items",
+        "gift cards return"
+      ],
+      "answer": "The following items are strictly non-returnable: (1) Final sale items, (2) Intimate apparel, swimwear, and earrings for hygienic reasons, (3) Personalized or custom-made goods, (4) Perishable items, and (5) Digital downloads and gift cards.",
+      "conditions": "Exceptions apply only if the item arrived damaged or defective."
+    },
+    {
+      "id": "RET-003",
+      "category": "returns",
+      "question": "How do I initiate a return request?",
+      "alternative_questions": [
+        "How can I return a product?",
+        "Steps to create a return",
+        "Where do I get a return label?",
+        "What is your RMA procedure for defective merchandise?",
+        "RMA procedure"
+      ],
+      "keywords": [
+        "initiate return",
+        "start return",
+        "return label",
+        "generate return",
+        "return request",
+        "rma",
+        "rma procedure",
+        "defective merchandise"
+      ],
+      "answer": "To initiate a return: (1) Go to 'My Orders' and select the order, (2) Click 'Return Item' and choose your return reason, (3) Print the pre-paid return shipping label provided, and (4) Pack the item securely and drop it off at any authorized carrier drop-off location.",
+      "conditions": "Prepaid label provided automatically upon return submission."
+    },
+    {
+      "id": "RET-004",
+      "category": "returns",
+      "question": "Do I have to pay for return shipping?",
+      "alternative_questions": [
+        "Is return shipping free?",
+        "Who pays return postage?",
+        "Return shipping costs"
+      ],
+      "keywords": [
+        "return shipping fee",
+        "free return",
+        "return postage",
+        "cost of return",
+        "return shipping cost"
+      ],
+      "answer": "Returns are 100% FREE if the item is damaged, defective, or incorrect due to our error. For standard change-of-mind returns, a flat return postage fee of $5.99 will be deducted from your final refund amount. Alternatively, you can drop off returns for free at any partner retail store.",
+      "conditions": "Defective items: $0 fee. Change-of-mind: $5.99 deducted from refund."
+    },
+    {
+      "id": "RET-005",
+      "category": "returns",
+      "question": "What condition must returned items be in?",
+      "alternative_questions": [
+        "Can I return an item without the box?",
+        "Does the product have to be unworn?",
+        "Return condition requirements"
+      ],
+      "keywords": [
+        "return condition",
+        "original tags",
+        "unworn",
+        "unopened",
+        "original packaging",
+        "damaged return"
+      ],
+      "answer": "Returned products must be unworn, unwashed, undamaged, and complete with all original tags, accessories, and packaging. Items showing signs of wear, smoke odor, or missing parts may be subject to a 20% restocking fee or rejection back to the sender.",
+      "conditions": "Warehouse inspection performed upon receipt."
+    },
+    {
+      "id": "REF-001",
+      "category": "refunds",
+      "question": "How long does a refund take to process?",
+      "alternative_questions": [
+        "When will I receive my refund?",
+        "When will I get my refund?",
+        "When will I get my refund back?",
+        "How long does a refund take?",
+        "When do I get my money back?",
+        "Refund timeline",
+        "How many days for refund to show up in my account?"
+      ],
+      "keywords": [
+        "refund time",
+        "refund processing",
+        "how long for refund",
+        "refund days",
+        "when will i get refunded",
+        "refund timeline"
+      ],
+      "answer": "Once our warehouse receives and inspects your returned package (typically 2-3 business days), your refund is issued immediately. It then takes 3 to 7 business days for the funds to reflect on your original payment method, depending on your bank or credit card provider.",
+      "conditions": "Bank processing times vary by financial institution."
+    },
+    {
+      "id": "REF-002",
+      "category": "refunds",
+      "question": "How will I receive my refund money?",
+      "alternative_questions": [
+        "Which account does the refund go to?",
+        "Refund payout method",
+        "Will refund go back to original card?"
+      ],
+      "keywords": [
+        "refund method",
+        "original payment",
+        "refund to card",
+        "refund destination",
+        "bank refund"
+      ],
+      "answer": "Refunds are automatically credited back to the original payment method used during checkout (credit/debit card, PayPal, or gift card). For security and anti-fraud regulations, refunds cannot be routed to a different card or third-party bank account.",
+      "conditions": "Original payment method only."
+    },
+    {
+      "id": "REF-003",
+      "category": "refunds",
+      "question": "Can I get store credit instead of a refund to my card?",
+      "alternative_questions": [
+        "Can I take store credit?",
+        "Refund as gift card",
+        "Instant refund as credit"
+      ],
+      "keywords": [
+        "store credit",
+        "gift card refund",
+        "instant credit",
+        "credit balance",
+        "exchange credit"
+      ],
+      "answer": "Yes! When initiating your return, you can opt for 'ShopSmart Store Credit'. Store credit is issued instantly upon carrier scan of your return package, plus we add an extra 10% bonus credit onto your store balance.",
+      "conditions": "Store credit does not expire and can be used on all products."
+    },
+    {
+      "id": "REF-004",
+      "category": "refunds",
+      "question": "What happens to my refund if I used a discount code or promo voucher?",
+      "alternative_questions": [
+        "Do I get promo codes refunded?",
+        "Refund with discount coupon",
+        "Coupon code return refund"
+      ],
+      "keywords": [
+        "promo code refund",
+        "discount code",
+        "coupon refund",
+        "voucher refund",
+        "promotional discount"
+      ],
+      "answer": "You will be refunded the actual amount paid after the discount was applied. If a promo code required a minimum spend and returning an item brings your order total below that threshold, the discount will be adjusted accordingly before issuing the refund. Single-use promo codes are not reissued.",
+      "conditions": "Refund reflects net cash paid."
+    },
+    {
+      "id": "REF-005",
+      "category": "refunds",
+      "question": "What should I do if my refund hasn't arrived after the estimated time?",
+      "alternative_questions": [
+        "Where is my late refund?",
+        "My refund is missing",
+        "I haven't received my refund after 10 days"
+      ],
+      "keywords": [
+        "refund delayed",
+        "missing refund",
+        "late refund",
+        "haven't received refund",
+        "refund inquiry"
+      ],
+      "answer": "If 10 business days have elapsed since you received our refund confirmation email, please: (1) Check with your bank or credit card company as processing delays can occur, (2) Check your PayPal account balance if paid via PayPal, and (3) Contact our support team at support@shopsmart.example.com with your ARN (Acquirer Reference Number) or order number, and we will trace the transaction immediately.",
+      "conditions": "Please allow 10 full business days before initiating a missing refund inquiry."
+    },
+    {
+      "id": "ORD-006",
+      "category": "orders",
+      "question": "I have not received an order confirmation email. What should I do?",
+      "alternative_questions": [
+        "Did my order go through?",
+        "Where is my order confirmation?",
+        "Missing confirmation email",
+        "I ordered but got no confirmation email"
+      ],
+      "keywords": [
+        "order confirmation",
+        "confirmation email",
+        "missing confirmation",
+        "order receipt",
+        "did my order go through"
+      ],
+      "answer": "Order confirmation emails are typically dispatched within 5 minutes of a successful purchase. If you have not received it: (1) Check your Spam or Promotions folder, (2) Log in to your account and check 'My Orders' to verify the order status, and (3) Confirm that your registered email address was spelled correctly. If the order appears under 'My Orders' with a status of Confirmed or Processing, your purchase went through successfully.",
+      "conditions": "Allow up to 15 minutes during peak sale periods for confirmation email delivery."
+    },
+    {
+      "id": "DEL-006",
+      "category": "deliveries",
+      "question": "My delivery is delayed. What should I do?",
+      "alternative_questions": [
+        "Why is my package delayed?",
+        "Late delivery help",
+        "My shipment has not arrived on time",
+        "What to do if delivery is late?",
+        "Package delay what to do"
+      ],
+      "keywords": [
+        "delivery delayed",
+        "delayed package",
+        "late shipment",
+        "shipment delay",
+        "package late",
+        "delivery delay",
+        "delayed delivery"
+      ],
+      "answer": "If your delivery has passed the estimated delivery date: (1) Check your tracking link for live carrier updates regarding weather delays, customs clearance, or transit exceptions, (2) Verify that your shipping address and contact number on file are accurate, and (3) If your package has been in transit for more than 2 business days past the estimated delivery window without carrier updates, please contact our support team at support@shopsmart.example.com with your order and tracking number, and we will initiate an expedited trace with the courier or dispatch a replacement.",
+      "conditions": "Carrier tracking updates may experience brief 24-hour sync delays during severe weather or peak holiday seasons."
+    },
+    {
+      "id": "GEN-001",
+      "category": "general",
+      "question": "What are your customer service hours and how can I contact support?",
+      "alternative_questions": [
+        "How can I speak to a human representative?",
+        "Can I talk to a real human person right now?",
+        "Speak to someone",
+        "Customer support hours",
+        "How to reach customer service?",
+        "Support phone number and email"
+      ],
+      "keywords": [
+        "customer service",
+        "support hours",
+        "contact support",
+        "human agent",
+        "real person",
+        "human person",
+        "talk to someone",
+        "help desk",
+        "customer care",
+        "representative"
+      ],
+      "answer": "Our customer support team is available Monday through Friday from 09:00 to 18:00 EST. You can contact us via email at support@shopsmart.example.com, call toll-free at 1-800-555-SHOP, or use the live chat feature on our website during operating hours. Inquiries received outside business hours will be answered on the next business morning.",
+      "conditions": "Emergency inquiries regarding unauthorized account access are monitored 24/7 via email."
+    },
+    {
+      "id": "GEN-002",
+      "category": "general",
+      "question": "How do I create or manage my ShopSmart account?",
+      "alternative_questions": [
+        "How to sign up?",
+        "Create account",
+        "Reset my password",
+        "Edit account settings"
+      ],
+      "keywords": [
+        "create account",
+        "sign up",
+        "register",
+        "account profile",
+        "reset password",
+        "manage account"
+      ],
+      "answer": "To create an account, click the 'Sign In / Register' button in the top right corner of our website, select 'Create Account', enter your name, email, and a secure password, and verify your email via the confirmation link sent to your inbox. You can manage your saved addresses, payment methods, and notification preferences anytime under 'My Account Settings'.",
+      "conditions": "Must be at least 18 years old to create an account."
+    }
+  ]
+}
